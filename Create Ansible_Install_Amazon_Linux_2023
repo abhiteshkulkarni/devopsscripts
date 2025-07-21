@@ -1,0 +1,64 @@
+🛠️ Ansible Installation & Configuration on AlmaLinux 2023 (AL2023)
+
+🚀 Steps
+1. Update System Packages
+   sudo dnf -y update
+
+2. Install EPEL Repository
+   sudo dnf install epel-release -y
+
+3. Install Ansible
+   sudo dnf install ansible -y
+
+4. Verify Ansible Installation
+   ansible --version
+
+🔐 SSH Configuration for Root Login
+
+5. Edit SSH Configuration File
+   sudo vi /etc/ssh/sshd_config
+   
+   Use :set number in vi to see line numbers. Modify these lines:
+   Line 40: PermitRootLogin yes
+   Line 45: PubkeyAuthentication yes
+   Line 65: PasswordAuthentication yes
+
+6. Restart and Check SSH Service
+   sudo systemctl restart sshd
+   sudo systemctl status sshd
+
+🔑 Setup SSH Authentication for Ansible
+
+7. Set/Change Root Password (for SSH login)
+   sudo passwd root
+   # Use password: root1234 (or your preferred one)
+
+8.  Generate SSH Key (on control node)
+    ssh-keygen -t rsa
+    # Press Enter to accept default locations
+
+9. Copy SSH Key to Target Host(s)
+   ssh-copy-id root@<private_ip>
+   # e.g., ssh-copy-id root@192.168.1.10
+
+🖥️ Configure Ansible Inventory
+
+10. Add Hosts to Ansible Inventory
+    sudo vi /etc/ansible/hosts
+Example:
+ [dev]
+192.168.1.10
+192.168.1.11
+
+✅ Test Ansible Connectivity
+
+ansible -m ping all
+
+
+Expected output:
+192.168.1.10 | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+
+
